@@ -18,6 +18,10 @@ const User = objectType({
     t.int('id')
     t.string('name', { nullable: true })
     t.string('email')
+    t.field('posts', {
+      list: true,
+      type: 'Post'
+    })
   },
 })
 
@@ -28,6 +32,18 @@ const Post = objectType({
     t.string('title')
     t.string('content', { nullable: true })
     t.boolean('published')
+    t.field('author', {
+      type: 'User',
+      resolve: async parent => {
+        const author = await prisma.post.findOne({
+          where: { id: parent.id }
+        }).author()
+        if (!author) {
+          throw new Error('A `Post` must always have an `author`')
+        }
+        return author
+      }
+    })
   },
 })
 
