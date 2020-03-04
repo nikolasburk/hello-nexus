@@ -33,6 +33,9 @@ const Query = queryType({
       nullable: true,
       args: {
         id: intArg({ required: true })
+      },
+      resolve: (_, args) => {
+        return users.find(u => u.id === args.id)
       }
     })
   }
