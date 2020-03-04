@@ -1,4 +1,4 @@
-import { queryType, objectType, makeSchema, stringArg } from 'nexus'
+import { queryType, objectType, makeSchema } from 'nexus'
 import { ApolloServer } from 'apollo-server'
 
 const users = [{
