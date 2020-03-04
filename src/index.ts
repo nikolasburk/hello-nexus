@@ -128,6 +128,15 @@ const Mutation = mutationType({
         })
       },
     })
+
+    t.crud.deleteOnePost({
+      alias: 'deletePost'
+    })
+
+    t.crud.deleteOneUser({
+      alias: 'deleteUser'
+    })
+
   },
 })
 
