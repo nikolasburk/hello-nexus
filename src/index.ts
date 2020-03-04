@@ -1,4 +1,4 @@
-import { queryType, objectType, makeSchema } from 'nexus'
+import { queryType, objectType, makeSchema, intArg } from 'nexus'
 import { ApolloServer } from 'apollo-server'
 
 const users = [{
@@ -26,6 +26,14 @@ const Query = queryType({
       type: 'User',
       list: true,
       resolve: () => users
+    })
+
+    t.field('user', {
+      type: 'User',
+      nullable: true,
+      args: {
+        id: intArg({ required: true })
+      }
     })
   }
 })
