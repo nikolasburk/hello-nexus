@@ -6,9 +6,8 @@ import {
   mutationType,
   stringArg,
 } from 'nexus'
-import { ApolloServer, addErrorLoggingToSchema } from 'apollo-server'
+import { ApolloServer } from 'apollo-server'
 import { PrismaClient } from '@prisma/client'
-import { stripIgnoredCharacters } from 'graphql'
 
 const prisma = new PrismaClient()
 
@@ -20,7 +19,12 @@ const User = objectType({
     t.string('email')
     t.field('posts', {
       list: true,
-      type: 'Post'
+      type: 'Post',
+      resolve: parent => {
+        return prisma.user.findOne({
+          where: { id: parent.id }
+        }).posts()
+      }
     })
   },
 })
@@ -34,14 +38,10 @@ const Post = objectType({
     t.boolean('published')
     t.field('author', {
       type: 'User',
-      resolve: async parent => {
-        const author = await prisma.post.findOne({
+      resolve: parent => {
+        return prisma.post.findOne({
           where: { id: parent.id }
         }).author()
-        if (!author) {
-          throw new Error('A `Post` must always have an `author`')
-        }
-        return author
       }
     })
   },
